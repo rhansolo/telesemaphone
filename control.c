@@ -33,7 +33,6 @@ int main(int argc, char *argv[]){
         s.val = 1;
 
         semctl(shsemid, 0, SETVAL, s);
-        semctl(shsemid, 0, SETVAL, s);
 
     }
     if(!strcmp(arg,"-r")){
@@ -41,15 +40,15 @@ int main(int argc, char *argv[]){
         shmctl(shmid,IPC_RMID, NULL);
         printf("This was the story you removed: \n");
         int fd=open("story.txt",O_RDONLY);
-        char * story=calloc(10000,sizeof(char));
+        char* story=calloc(10000,sizeof(char));
         int readbytes=read(fd,story,10000);
         if(readbytes<0){
             printf("%s\n",strerror(errno));
         }
         printf("%s\n",story);
         close(fd);
-        int storyfd=open("story.txt",O_TRUNC);
-        close(storyfd);
+        int storyfile=open("story.txt",O_TRUNC);
+        close(storyfile);
         semctl(shsemid, 0, IPC_RMID);
         semctl(fsemid, 0, IPC_RMID);
         free(story);
@@ -59,14 +58,11 @@ int main(int argc, char *argv[]){
     if(!strcmp(arg,"-v")){
         printf("This is the story: \n");
         int fd=open("story.txt",O_RDONLY);
-        char *story=calloc(10000,sizeof(char));
-        int readbytes=read(fd,story,10000);
-        if(readbytes<0){
-            printf("%s\n",strerror(errno));
-        }
-        printf("%s\n",story);
+        char *fileStory=calloc(10000,sizeof(char));
+        int readbytes=read(fd,fileStory,10000);
+        printf("%s\n",fileStory);
         close(fd);
-        free(story);
+        free(fileStory);
     }
 
 
